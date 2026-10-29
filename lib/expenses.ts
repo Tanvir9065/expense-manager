@@ -7,6 +7,17 @@ export const CATEGORIES: Record<EntryType, readonly string[]> = {
   income: ["Salary", "Business", "Gift", "Other"],
 };
 
+export const CATEGORY_ICONS: Record<string, string> = {
+  Food: "🍽️",
+  Travel: "🚕",
+  Bills: "🧾",
+  Shopping: "🛍️",
+  Other: "📦",
+  Salary: "💼",
+  Business: "🏪",
+  Gift: "🎁",
+};
+
 export type Expense = {
   id: string;
   type: EntryType;
@@ -29,9 +40,12 @@ export type NewExpense = {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-export function todayString(): string {
-  const d = new Date();
+function toDateString(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+export function todayString(): string {
+  return toDateString(new Date());
 }
 
 export function currentMonth(): string {
@@ -56,9 +70,15 @@ export function formatMonth(month: string): string {
   });
 }
 
-export function formatDate(date: string): string {
+// "Today", "Yesterday", or "Tue, 28 Oct"
+export function formatDayLabel(date: string): string {
+  const now = new Date();
+  if (date === toDateString(now)) return "Today";
+  const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  if (date === toDateString(yesterday)) return "Yesterday";
   const [y, m, d] = date.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("en-IN", {
+    weekday: "short",
     day: "numeric",
     month: "short",
   });
@@ -70,21 +90,21 @@ export function formatMoney(amount: number): string {
 
 /* ---------- Validation ---------- */
 
-// Amount string ko valid positive number mein badalta hai, warna error throw karta hai.
+// Converts the amount string to a valid positive number, or throws an error.
 export function parseAmount(raw: string): number {
   const value = Number(raw.trim());
   if (raw.trim() === "" || !Number.isFinite(value)) {
-    throw new Error("Amount ek valid number hona chahiye.");
+    throw new Error("Please enter a valid amount.");
   }
   if (value <= 0) {
-    throw new Error("Amount 0 se zyada hona chahiye.");
+    throw new Error("Amount must be greater than 0.");
   }
   return Math.round(value * 100) / 100;
 }
 
 /* ---------- Supabase functions ---------- */
 
-// Ek mahine ki saari entries (expense + income), newest pehle.
+// All entries (expenses + income) for one month, newest first.
 export async function fetchExpenses(month: string): Promise<Expense[]> {
   const start = `${month}-01`;
   const end = `${shiftMonth(month, 1)}-01`;

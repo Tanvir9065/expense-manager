@@ -1,5 +1,5 @@
--- Agar aap pehle hi purana schema.sql chala chuke hain, to sirf ye chalayein
--- (purane expenses jaisa ke taisa rahenge, type 'expense' ban jayega)
+-- Already ran the older schema? Run only this.
+-- Existing rows stay as they are and become type 'expense'.
 
 alter table expenses
   add column type text not null default 'expense'

@@ -1,5 +1,5 @@
--- Naya setup: Supabase Dashboard -> SQL Editor mein ye chalayein
--- (Agar purana schema pehle chala chuke hain, to iske bajay add_income.sql chalayein)
+-- New setup: run this in Supabase Dashboard -> SQL Editor
+-- (If you already ran the older schema, run add_income.sql instead)
 
 create table expenses (
   id uuid primary key default gen_random_uuid(),
@@ -11,13 +11,12 @@ create table expenses (
   created_at timestamptz default now()
 );
 
--- Optional: dashboard ko tez rakhne ke liye
+-- Optional: keeps the dashboard fast
 create index expenses_date_idx on expenses (date desc);
 
--- Agar aapne table Supabase ke Table Editor se banayi hai (RLS ON hota hai),
--- ya "RLS enabled" dikh raha hai, to ye policies chalayein taaki anon key se
--- read/insert/delete ho sake. SQL editor se banayi table mein RLS default OFF hoti hai,
--- tab iski zaroorat nahi.
+-- If you created the table from the Table Editor (RLS is ON by default there),
+-- run these policies so the anon key can read, insert and delete.
+-- Tables created from the SQL editor have RLS OFF, so this is not needed.
 --
 -- alter table expenses enable row level security;
 -- create policy "anon select" on expenses for select to anon using (true);
