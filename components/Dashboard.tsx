@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import CategoryIcon from "@/components/CategoryIcon";
 import TrendChart from "@/components/TrendChart";
 import { useToast } from "@/components/Toast";
 import { deleteExpense, fetchExpenses, restoreExpense, runRecurring } from "@/lib/api";
 import { useSettings } from "@/lib/useSettings";
 import {
-  categoryIcon,
   currentMonth,
   formatDayLabel,
   formatMoney,
@@ -123,8 +123,8 @@ function EntryRow({ entry, confirming, onAskDelete, onCancel, onDelete }: EntryR
 
   const body = (
     <>
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-subtle text-lg">
-        {categoryIcon(entry.category)}
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-subtle text-accent">
+        <CategoryIcon name={entry.category} />
       </span>
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">{entry.category}</p>
@@ -484,8 +484,8 @@ export default function Dashboard() {
                   return (
                     <div key={category}>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="flex items-center gap-2 text-ink">
-                          <span className="text-base">{categoryIcon(category)}</span>
+                        <span className="flex items-center gap-2.5 text-ink">
+                          <CategoryIcon name={category} className="h-4 w-4 text-accent" />
                           {category}
                         </span>
                         <span className="font-medium tabular-nums">{formatMoney(amount)}</span>
@@ -552,7 +552,9 @@ export default function Dashboard() {
 
             {monthEntries.length === 0 ? (
               <div className="flex flex-col items-center rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-12 text-center">
-                <span className="text-4xl">🧾</span>
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-subtle text-accent">
+                  <CategoryIcon name="Bills" className="h-7 w-7" />
+                </span>
                 <p className="mt-3 text-sm font-medium">No expenses yet</p>
                 <p className="mt-1 text-sm text-muted">Nothing recorded for this month.</p>
                 <Link

@@ -29,8 +29,20 @@ export default function LoginPage() {
     <div className="flex min-h-[70vh] flex-col justify-center">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-accent text-3xl text-white shadow-lg shadow-accent/30">
-            ₹
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-accent text-white shadow-lg shadow-accent/30">
+            <svg
+              viewBox="0 0 512 512"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={38}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="h-9 w-9"
+            >
+              <path d="M168 148h188M168 214h188" />
+              <path d="M168 148h62a71 71 0 0 1 0 142h-62l152 106" />
+            </svg>
           </div>
           <h1 className="mt-5 text-xl font-semibold tracking-tight">Expense Tracker</h1>
           <p className="mt-1 text-sm text-muted">Enter your PIN to continue</p>

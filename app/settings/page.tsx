@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import CategoryIcon from "@/components/CategoryIcon";
 import { useToast } from "@/components/Toast";
 import { logout, saveSettings } from "@/lib/api";
 import { useSettings } from "@/lib/useSettings";
-import { categoryIcon, formatMoney, type Categories, type EntryType } from "@/lib/utils";
+import { formatMoney, type Categories, type EntryType } from "@/lib/utils";
 
 const fieldClass =
   "w-full rounded-2xl border border-line bg-surface px-4 py-3 text-base text-ink outline-none transition placeholder:text-faint focus:border-accent focus:ring-4 focus:ring-accent/15";
@@ -61,7 +62,7 @@ function CategoryEditor({ title, type, categories, onChange }: CategoryEditorPro
             key={c}
             className="flex items-center gap-1.5 rounded-full border border-line bg-subtle py-1.5 pl-3 pr-1.5 text-sm"
           >
-            <span>{categoryIcon(c)}</span>
+            <CategoryIcon name={c} className="h-4 w-4 text-accent" />
             {c}
             <button
               onClick={() => remove(c)}
@@ -102,15 +103,18 @@ export default function SettingsPage() {
 
   const [budgetInput, setBudgetInput] = useState("");
   const [savingBudget, setSavingBudget] = useState(false);
+  const typed = useRef(false);
 
+  // Fill in the saved budget once it loads, but never overwrite what the user has typed
   useEffect(() => {
-    if (loaded) setBudgetInput(settings.budget ? String(settings.budget) : "");
+    if (loaded && !typed.current) setBudgetInput(settings.budget ? String(settings.budget) : "");
   }, [loaded, settings.budget]);
 
   async function saveBudget(value: number | null) {
     setSavingBudget(true);
     try {
       setSettings(await saveSettings({ budget: value }));
+      if (value === null) setBudgetInput("");
       show(value === null ? "Budget removed" : "Budget saved");
     } catch (e) {
       show(e instanceof Error ? e.message : "Could not save the budget.", { tone: "error" });
@@ -180,7 +184,10 @@ export default function SettingsPage() {
               min="0"
               step="1"
               value={budgetInput}
-              onChange={(e) => setBudgetInput(e.target.value)}
+              onChange={(e) => {
+                typed.current = true;
+                setBudgetInput(e.target.value);
+              }}
               placeholder="20000"
               aria-label="Monthly budget"
               className={`${fieldClass} pl-9`}

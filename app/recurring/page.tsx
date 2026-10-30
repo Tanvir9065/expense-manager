@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import CategoryIcon from "@/components/CategoryIcon";
 import EntryForm from "@/components/EntryForm";
 import { useToast } from "@/components/Toast";
 import {
@@ -10,7 +11,7 @@ import {
   runRecurring,
   updateRecurring,
 } from "@/lib/api";
-import { categoryIcon, formatMoney, todayString, type Recurring } from "@/lib/utils";
+import { formatMoney, todayString, type Recurring } from "@/lib/utils";
 
 function ordinal(n: number): string {
   if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`;
@@ -125,7 +126,9 @@ export default function RecurringPage() {
         </div>
       ) : rules.length === 0 && !adding ? (
         <div className="flex flex-col items-center rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-12 text-center">
-          <span className="text-4xl">🔁</span>
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-subtle text-accent">
+            <CategoryIcon name="__repeat" className="h-7 w-7" />
+          </span>
           <p className="mt-3 text-sm font-medium">No recurring entries yet</p>
           <p className="mt-1 text-sm text-muted">Tap New to set one up.</p>
         </div>
@@ -136,8 +139,8 @@ export default function RecurringPage() {
             return (
               <li key={rule.id} className="px-4 py-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-subtle text-lg">
-                    {categoryIcon(rule.category)}
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-subtle text-accent">
+                    <CategoryIcon name={rule.category} />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="flex items-center gap-2 truncate text-sm font-medium">

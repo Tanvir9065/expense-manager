@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CategoryIcon from "@/components/CategoryIcon";
 import { useSettings } from "@/lib/useSettings";
 import {
-  categoryIcon,
   parseAmount,
   todayString,
   type EntryInput,
@@ -163,7 +163,7 @@ export default function EntryForm({
                       : "border-line bg-surface text-muted"
                   }`}
                 >
-                  <span>{categoryIcon(c)}</span>
+                  <CategoryIcon name={c} className="h-4 w-4" />
                   {c}
                 </button>
               ))

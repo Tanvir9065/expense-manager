@@ -61,21 +61,6 @@ export const DEFAULT_SETTINGS: Settings = {
   categories: DEFAULT_CATEGORIES,
 };
 
-const CATEGORY_ICONS: Record<string, string> = {
-  Food: "🍽️",
-  Travel: "🚕",
-  Bills: "🧾",
-  Shopping: "🛍️",
-  Other: "📦",
-  Salary: "💼",
-  Business: "🏪",
-  Gift: "🎁",
-};
-
-export function categoryIcon(name: string): string {
-  return CATEGORY_ICONS[name] ?? "🏷️";
-}
-
 /* ---------- Dates (local time, "YYYY-MM-DD" / "YYYY-MM") ---------- */
 
 export const pad = (n: number) => String(n).padStart(2, "0");
