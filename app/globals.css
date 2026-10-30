@@ -1,8 +1,53 @@
 @import "tailwindcss";
 
+/* Theme tokens. Dark mode follows the phone/computer setting. */
 :root {
-  --background: #f6f7fb;
-  --foreground: #0f172a;
+  --page: #f6f7fb;
+  --surface: #ffffff;
+  --subtle: #f1f5f9;
+  --line: #e2e8f0;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --accent: #4f46e5;
+  --income: #059669;
+  --err-bg: #fef2f2;
+  --err-line: #fecaca;
+  --err-ink: #b91c1c;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #0b0f1a;
+    --surface: #141a2a;
+    --subtle: #1d2539;
+    --line: #263049;
+    --ink: #e8ecf5;
+    --muted: #94a3b8;
+    --faint: #64748b;
+    --accent: #6366f1;
+    --income: #34d399;
+    --err-bg: #2a1215;
+    --err-line: #5b1f25;
+    --err-ink: #fca5a5;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-income: var(--income);
+  --color-err-bg: var(--err-bg);
+  --color-err-line: var(--err-line);
+  --color-err-ink: var(--err-ink);
 }
 
 html {
@@ -10,8 +55,8 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--page);
+  color: var(--ink);
   font-family:
     ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
