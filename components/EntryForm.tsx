@@ -2,14 +2,18 @@
 
 import { useEffect, useState } from "react";
 import CategoryIcon from "@/components/CategoryIcon";
+import { fetchCategoryUsage } from "@/lib/api";
 import { useSettings } from "@/lib/useSettings";
 import {
   parseAmount,
   todayString,
+  type CategoryUsage,
   type EntryInput,
   type EntryType,
   type Expense,
 } from "@/lib/utils";
+
+const TOP_CATEGORIES = 10; // how many category chips are shown before "More"
 
 type Props = {
   initial?: Pick<Expense, "type" | "amount" | "category" | "date" | "note">;
@@ -49,11 +53,20 @@ export default function EntryForm({
   const [note, setNote] = useState(initial?.note ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [usage, setUsage] = useState<CategoryUsage | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   // Today's date is set in the browser so it matches the user's timezone
   useEffect(() => {
     if (!initial) setDate(todayString());
   }, [initial]);
+
+  // How often each category has been used (if this fails, the settings order is used)
+  useEffect(() => {
+    fetchCategoryUsage()
+      .then(setUsage)
+      .catch(() => setUsage({ expense: {}, income: {} }));
+  }, []);
 
   // Category list for the chosen type. When editing, keep the entry's own
   // category selectable even if it was later removed from Settings.
@@ -62,7 +75,19 @@ export default function EntryForm({
     initial && initial.type === type && !base.includes(initial.category)
       ? [...base, initial.category]
       : base;
-  const selected = list.includes(category) ? category : list[0];
+
+  // Most used first; categories with the same count keep their Settings order
+  const counts = usage?.[type] ?? {};
+  const ranked = [...list].sort(
+    (a, b) => (counts[b] ?? 0) - (counts[a] ?? 0) || list.indexOf(a) - list.indexOf(b)
+  );
+  const selected = list.includes(category) ? category : ranked[0];
+
+  // Show the 10 most used, plus the selected one if it is not among them
+  const top = ranked.slice(0, TOP_CATEGORIES);
+  if (!top.includes(selected)) top.push(selected);
+  const hiddenCount = ranked.length - top.length;
+  const visible = showAll ? ranked : top;
 
   function changeType(next: EntryType) {
     setType(next);
@@ -149,10 +174,15 @@ export default function EntryForm({
 
       {/* Category */}
       <div>
-        <span className={labelClass}>Category</span>
+        <span className={labelClass}>
+          Category{" "}
+          {ranked.length > TOP_CATEGORIES && (
+            <span className="font-normal text-faint">(most used first)</span>
+          )}
+        </span>
         <div className="flex flex-wrap gap-2">
-          {loaded
-            ? list.map((c) => (
+          {loaded && usage
+            ? visible.map((c) => (
                 <button
                   key={c}
                   type="button"
@@ -170,6 +200,16 @@ export default function EntryForm({
             : [0, 1, 2, 3].map((i) => (
                 <div key={i} className="h-11 w-24 animate-pulse rounded-full bg-subtle" />
               ))}
+
+          {loaded && usage && (hiddenCount > 0 || showAll) && ranked.length > TOP_CATEGORIES && (
+            <button
+              type="button"
+              onClick={() => setShowAll((v) => !v)}
+              className="rounded-full border border-dashed border-line px-4 py-2.5 text-sm font-medium text-accent transition active:scale-95"
+            >
+              {showAll ? "Show less" : `More (${hiddenCount})`}
+            </button>
+          )}
         </div>
       </div>
 
@@ -213,7 +253,7 @@ export default function EntryForm({
 
       <button
         type="submit"
-        disabled={saving || !loaded}
+        disabled={saving || !loaded || !usage}
         className="w-full rounded-2xl bg-accent py-4 text-base font-semibold text-white shadow-lg shadow-accent/20 transition active:scale-[0.99] disabled:opacity-60"
       >
         {saving ? "Saving…" : submitLabel(type)}

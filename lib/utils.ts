@@ -44,6 +44,9 @@ export type RecurringInput = {
   start_date: string;
 };
 
+// How many entries each category has, per type: { expense: { Food: 12 }, income: { Salary: 3 } }
+export type CategoryUsage = Record<EntryType, Record<string, number>>;
+
 export type Settings = {
   budget: number | null;
   categories: Categories;

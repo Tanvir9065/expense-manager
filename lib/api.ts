@@ -1,6 +1,7 @@
 // Browser-side helpers. Every function calls our own /api routes.
 import { clearOfflineData } from "./offline";
 import type {
+  CategoryUsage,
   EntryInput,
   Expense,
   Recurring,
@@ -63,6 +64,8 @@ export const restoreExpense = (entry: Expense) =>
   request<Expense>("/api/expenses", send("POST", entry));
 
 /* ---------- Settings ---------- */
+
+export const fetchCategoryUsage = () => request<CategoryUsage>("/api/categories");
 
 export const fetchSettings = () => request<Settings>("/api/settings");
 

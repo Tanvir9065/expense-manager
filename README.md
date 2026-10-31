@@ -35,6 +35,15 @@ Changing `APP_PIN` or `AUTH_SECRET` signs you out everywhere.
 2. In Vercel, import the repo and add the four environment variables.
 3. Deploy. After changing environment variables later, redeploy.
 
+## Categories
+
+Each category gets an icon from its name (`lib/icons.ts`): "Gym" shows a dumbbell, "Rent" a house,
+"Petrol" a fuel pump, "Netflix" a TV, and so on. It understands common English and Hindi words;
+anything it does not recognise gets a tag icon. To teach it new words, add them to the `RULES` list in that file.
+
+In the add form the 10 most used categories come first (counted from your saved entries);
+the rest are behind "More".
+
 ## Offline use
 
 A service worker (`public/sw.js`, production only) saves the pages and data you have opened.

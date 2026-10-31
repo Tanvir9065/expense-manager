@@ -8,6 +8,7 @@ import {
   pad,
   shiftMonth,
   type Categories,
+  type CategoryUsage,
   type Expense,
   type Recurring,
   type Settings,
@@ -82,6 +83,26 @@ export async function updateExpense(id: string, patch: EntryFields): Promise<Exp
 export async function deleteExpense(id: string): Promise<void> {
   const { error } = await getSupabase().from("expenses").delete().eq("id", id);
   if (error) throw new Error(error.message);
+}
+
+// Number of entries per category (all time), used to show the most-used categories first.
+export async function categoryUsage(): Promise<CategoryUsage> {
+  const usage: CategoryUsage = { expense: {}, income: {} };
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error } = await getSupabase()
+      .from("expenses")
+      .select("type,category")
+      .order("id")
+      .range(offset, offset + PAGE_SIZE - 1);
+
+    if (error) throw new Error(error.message);
+    for (const row of data ?? []) {
+      const counts = usage[row.type === "income" ? "income" : "expense"];
+      counts[row.category] = (counts[row.category] ?? 0) + 1;
+    }
+    if (!data || data.length < PAGE_SIZE) break;
+  }
+  return usage;
 }
 
 /* ---------- Settings (budget + categories) ---------- */
