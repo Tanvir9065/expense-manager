@@ -38,6 +38,8 @@ export const ICON_PATHS: Record<string, string> = {
   laptop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/>',
   wrench:
     '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9Z"/>',
+  hardhat:
+    '<path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1Z"/><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><path d="M14 6a6 6 0 0 1 6 6v3"/>',
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
   bank: '<path d="M3 22h18"/><path d="M6 18v-7M10 18v-7M14 18v-7M18 18v-7"/><path d="M12 2 3 8h18Z"/>',
   trend: '<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
@@ -85,6 +87,7 @@ const RULES: [icon: string, words: string[]][] = [
   ["school", ["school", "college", "education", "fees", "tuition", "course", "book", "stationery", "exam", "study", "class"]],
   ["shirt", ["cloth", "fashion", "apparel", "shoe", "footwear", "dress", "jeans"]],
   ["scissors", ["salon", "haircut", "beauty", "grooming", "parlour", "parlor", "spa", "barber", "makeup"]],
+  ["hardhat", ["site", "construction", "labour", "labor", "material", "cement", "building", "contractor", "civil", "mistri", "mazdoor", "worker"]],
   ["laptop", ["laptop", "computer", "electronic", "gadget", "software", "tech", "hosting", "domain", "cloud", "app"]],
   ["wrench", ["repair", "service", "mechanic", "plumber", "electrician", "fix", "garage"]],
   ["shield", ["insurance", "policy", "premium", "lic"]],
