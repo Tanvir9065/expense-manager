@@ -55,13 +55,13 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ToastContext.Provider value={{ show }}>
-      {children}
-
       {!online && (
-        <div className="fixed inset-x-0 top-0 z-40 bg-amber-500 py-1.5 text-center text-xs font-medium text-white">
-          You&apos;re offline. Changes can&apos;t be saved right now.
+        <div className="sticky top-0 z-40 bg-amber-500 px-4 py-1.5 text-center text-xs font-medium text-white">
+          You&apos;re offline. Showing saved data; changes can&apos;t be saved.
         </div>
       )}
+
+      {children}
 
       <div className="pointer-events-none fixed inset-x-0 bottom-28 z-30 flex flex-col items-center gap-2 px-4">
         {toasts.map((t) => (

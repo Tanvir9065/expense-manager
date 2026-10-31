@@ -333,6 +333,7 @@ export default function Dashboard() {
       await deleteExpense(entry.id);
       setEntries((prev) => prev.filter((e) => e.id !== entry.id));
       show("Entry deleted", { action: { label: "Undo", onClick: () => undoDelete(entry) } });
+      load(true); // refresh in the background so the offline copy matches
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not delete this entry.");
     }

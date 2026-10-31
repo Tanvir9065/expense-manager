@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Nav from "@/components/Nav";
+import RegisterSW from "@/components/RegisterSW";
 import { ToastProvider } from "@/components/Toast";
 import "./globals.css";
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ToastProvider>
           <main className="mx-auto w-full max-w-md px-4 pb-36 pt-6">{children}</main>
           <Nav />
+          <RegisterSW />
         </ToastProvider>
       </body>
     </html>

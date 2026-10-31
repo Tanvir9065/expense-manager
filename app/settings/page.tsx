@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import CategoryIcon from "@/components/CategoryIcon";
 import { useToast } from "@/components/Toast";
 import { logout, saveSettings } from "@/lib/api";
+import { clearOfflineData } from "@/lib/offline";
 import { useSettings } from "@/lib/useSettings";
 import { formatMoney, type Categories, type EntryType } from "@/lib/utils";
 
@@ -146,9 +147,13 @@ export default function SettingsPage() {
   async function handleLogout() {
     try {
       await logout();
-    } finally {
+      await clearOfflineData();
       router.replace("/login");
       router.refresh();
+    } catch (e) {
+      show(e instanceof Error ? e.message : "Could not sign out. Check your connection.", {
+        tone: "error",
+      });
     }
   }
 

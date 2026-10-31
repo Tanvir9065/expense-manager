@@ -1,4 +1,5 @@
 // Browser-side helpers. Every function calls our own /api routes.
+import { clearOfflineData } from "./offline";
 import type {
   EntryInput,
   Expense,
@@ -20,6 +21,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   }
 
   if (response.status === 401 && !url.startsWith("/api/login")) {
+    await clearOfflineData();
     window.location.href = "/login";
     throw new Error("Please sign in.");
   }

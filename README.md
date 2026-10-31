@@ -35,6 +35,12 @@ Changing `APP_PIN` or `AUTH_SECRET` signs you out everywhere.
 2. In Vercel, import the repo and add the four environment variables.
 3. Deploy. After changing environment variables later, redeploy.
 
+## Offline use
+
+A service worker (`public/sw.js`, production only) saves the pages and data you have opened.
+Offline you can still open the app and see what you last saw. Adding, editing and deleting need a connection.
+Signing out removes the saved pages and data from the device.
+
 ## Pages
 
 - `/` Dashboard: spent, income, balance, budget, last 6 months, categories, transactions
